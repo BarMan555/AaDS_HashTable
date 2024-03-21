@@ -3,9 +3,6 @@
 
 namespace HashTable
 {
-	template<class Key>
-	size_t hash(const Key key);
-
 	template<class Key, class Value>
 	class HashTable
 	{
@@ -35,5 +32,26 @@ namespace HashTable
 		Value* search(Key key);
 		bool erase(Key key);
 		int count(Key key);
+
+		size_t hash(const Key key);
 	};
+}
+
+namespace HashTable
+{
+	template<class Key, class Value>
+	size_t HashTable<Key, Value>::hash(const Key key)
+	{
+		return key % (Key)_data.size();
+	}
+
+	template<class Key, class Value>
+	HashTable<Key, Value>::HashTable()
+	{
+	}
+
+	template<class Key, class Value>
+	HashTable<Key, Value>::HashTable(const size_t size)
+	{
+	}
 }
