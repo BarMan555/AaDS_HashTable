@@ -12,6 +12,8 @@ namespace HashTableSpace
 			Key key;
 			Value value;
 			bool filled;
+
+			bool operator==(const Pair& other);
 		};
 
 		std::vector<Pair> _data;
@@ -26,6 +28,7 @@ namespace HashTableSpace
 		~HashTable() = default;
 
 		HashTable& operator=(const HashTable& hashTable);
+		bool operator==(const HashTable& other);
 
 		void print();
 		void insert(const Key& key, const Value& value);
@@ -55,14 +58,18 @@ namespace HashTableSpace
 	template<class Key, class Value>
 	HashTable<Key, Value>::HashTable(const size_t capacity) : _size(0)
 	{
-		if (capacity == 0) throw std::exception("Invalud argument: capacity = 0");
+		//if (capacity == 0) throw std::exception("Invalud argument: capacity = 0");
 		_data.resize(capacity);
 	}
 
 	template<class Key, class Value>
-	HashTable<Key, Value>::HashTable(const HashTable& other)
+	HashTable<Key, Value>::HashTable(const HashTable& other) : HashTable(other._size)
 	{
-
+		if (other == *this) return;
+		for (auto& pair : other._data)
+		{
+			if(pair.filled) insert(pair.key, pair.value);
+		}
 	}
 
 	template<class Key, class Value>
@@ -110,5 +117,22 @@ namespace HashTableSpace
 		{
 			if (vect[i].filled) insert(vect[i].key, vect[i].value);
 		}
+	}
+
+	template<class Key, class Value>
+	bool HashTable<Key, Value>::operator==(const HashTable& other)
+	{
+		if (this->_size != other._size) return false;
+		for (size_t i = 0; i < std::min(this->_data.size(), other._data.size()); ++i)
+		{
+			if (this->_data[i] != other._data[i]) return false;
+		}
+		return true;
+	}
+
+	template<class Key, class Value>
+	bool HashTable<Key, Value>::Pair::operator==(const Pair& other)
+	{
+		return key == other.key && value == other.value && filled == other.filled;
 	}
 }
