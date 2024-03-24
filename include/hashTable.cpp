@@ -100,7 +100,7 @@ namespace HashTableSpace
 				++_size;
 				return;
 			}
-			if (_data[index].key == key) throw std::logic_error("Key is exist");
+			//if (_data[index].key == key) throw std::logic_error("Key is exist");
 		}
 		grow();
 		insert(key, value);
@@ -182,5 +182,33 @@ namespace HashTableSpace
 			}
 		}
 		return nullptr;
+	}
+
+	template<class Key, class Value>
+	bool HashTable<Key, Value>::erase(Key key)
+	{
+		for (size_t i = 0; i < _data.size(); ++i)
+		{
+			size_t index = (hash(key) + i * hash(key)) % _data.size();
+			if (_data[index].filled && _data[index].key == key)
+			{
+				_data[index].filled = false;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	template<class Key, class Value>
+	HashTable<Key, Value>& HashTable<Key, Value>::operator=(const HashTable& hashTable)
+	{
+		if (hashTable == *this) return *this;
+		_data.clear();
+		_data.resize(hashTable._size);
+		for (auto& pair : hashTable._data)
+		{
+			if (pair.filled) insert(pair.key, pair.value);
+		}
+		return *this;
 	}
 }
