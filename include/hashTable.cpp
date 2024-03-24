@@ -107,6 +107,30 @@ namespace HashTableSpace
 	}
 
 	template<class Key, class Value>
+	void HashTable<Key, Value>::insert_or_assign(const Key& key, const Value& value)
+	{
+		if (_size != 0)
+		{
+			double load_factor = _size / (_data.size() + 0.0);
+			if (load_factor > 0.6) grow();
+		}
+		for (size_t i = 0; i < _data.size(); ++i)
+		{
+			size_t index = (hash(key) + i * hash(key)) % _data.size();
+			if (!_data[index].filled || _data[index].key == key)
+			{
+				_data[index].key = key;
+				_data[index].value = value;
+				_data[index].filled = true;
+				++_size;
+				return;
+			}
+		}
+		grow();
+		insert_or_assign(key, value);
+	}
+
+	template<class Key, class Value>
 	void HashTable<Key, Value>::grow()
 	{
 		std::vector<Pair> vect;
