@@ -159,4 +159,28 @@ namespace HashTableSpace
 	{
 		return key == other.key && value == other.value && filled == other.filled;
 	}
+
+	template<class Key, class Value>
+	bool HashTable<Key, Value>::contains(Value value)
+	{
+		for (auto& pair : _data)
+		{
+			if (pair.filled and pair.value == value) return true;
+		}
+		return false;
+	}
+
+	template<class Key, class Value>
+	Value* HashTable<Key, Value>::search(Key key)
+	{
+		for (size_t i = 0; i < _data.size(); ++i)
+		{
+			size_t index = (hash(key) + i * hash(key)) % _data.size();
+			if (_data[index].filled && _data[index].key == key)
+			{
+				return &(_data[index].value);
+			}
+		}
+		return nullptr;
+	}
 }
