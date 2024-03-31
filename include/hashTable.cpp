@@ -100,7 +100,7 @@ namespace HashTableSpace
 				++_size;
 				return;
 			}
-			//if (_data[index].key == key) throw std::logic_error("Key is exist");
+			if (_data[index].key == key) throw std::logic_error("Key is exist");
 		}
 		grow();
 		insert(key, value);
@@ -210,5 +210,46 @@ namespace HashTableSpace
 			if (pair.filled) insert(pair.key, pair.value);
 		}
 		return *this;
+	}
+
+	template<class Key, class Value>
+	int HashTable<Key, Value>::count(Key key)
+	{
+		int count = 0;
+		for(size_t i = 0; count < _size; ++i)
+		{
+			size_t index = (hash(key) + i * hash(key)) % _data.size();
+			if (!_data[index].filled) return count;
+			else if (hash(key) == hash(_data[index].key)) ++count;
+		}
+		return count;
+	}
+}
+
+namespace HashTableSpace_Task
+{
+	using namespace HashTableSpace;
+	
+	int PearsonHash(const char* str, size_t len)
+	{
+		char T[256];
+		for (size_t i = 0; i < 256; i++)
+			T[i] = (char)i;
+
+		for (int i = 0; i < 256; ++i)
+			std::swap(T[i], T[std::rand() % 256]);
+
+		int hash = 0;
+		for (size_t i = 0; i < len; ++i)
+		{
+			hash = T[hash ^ str[i]];
+		}
+
+		return hash;
+	}
+
+	bool compare_hash(const int hash1, const int hash2)
+	{
+		return hash1 == hash2;
 	}
 }
