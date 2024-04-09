@@ -234,11 +234,10 @@ namespace HashTableSpace
 	int HashTable<Key, Value>::count(Key key)
 	{
 		int count = 0;
-		for(size_t i = 0; count < _size; ++i)
+		for(size_t i = 0; i < _size; ++i)
 		{
 			size_t index = (hash(key) + i * hash(key)) % _data.size();
-			if (!_data[index].filled) return count;
-			else if (hash(key) == hash(_data[index].key)) ++count;
+			if (hash(key) == hash(_data[index].key) && _data[index].filled) ++count;
 		}
 		return count;
 	}
@@ -270,7 +269,7 @@ namespace HashTableSpace_Task
 	
 	int pearson_hash(const std::string& str)
 	{
-		int hash = 0;
+		unsigned int hash = 0;
 		for (auto& c : str)
 		{
 			hash = T[hash ^ c];

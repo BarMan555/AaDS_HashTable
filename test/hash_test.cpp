@@ -74,3 +74,15 @@ TEST(hash_test, constructor_2)
 	HashTable<int, int> ht2(ht1);
 	ASSERT_TRUE(ht1==ht2);
 }
+
+TEST(hash_test, erase_in_middle)
+{
+	HashTable<int, int> ht(5);
+	ht.insert(1, 10);
+	ht.insert(2, 10);
+	ht.insert(3, 10);
+	ht.insert(4, 10);
+	ht.insert(11, 10);
+	ht.erase(3);
+	ASSERT_EQ(ht.count(3), 0);
+}
