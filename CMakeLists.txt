@@ -28,8 +28,8 @@ add_library(hashTable_lib SHARED "include/hashTable.cpp")
 target_include_directories(hashTable_lib PUBLIC "include")
 
 # Объявляем тесты
-#add_executable(set_test "test/set_test.cpp")
-#target_link_libraries(set_test set_lib GTest::gtest_main)
+add_executable(hashTable_test "test/hash_test.cpp")
+target_link_libraries(hashTable_test hashTable_lib GTest::gtest_main)
 
 # Объявляем консольное приложение
 add_executable(app "app/main.cpp")
