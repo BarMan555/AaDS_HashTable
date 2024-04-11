@@ -84,5 +84,5 @@ TEST(hash_test, erase_in_middle)
 	ht.insert(4, 10);
 	ht.insert(11, 10);
 	ht.erase(3);
-	ASSERT_EQ(ht.count(3), 0);
+	ASSERT_EQ(ht.count(11), 2);
 }

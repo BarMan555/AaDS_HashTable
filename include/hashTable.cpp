@@ -13,8 +13,17 @@ namespace HashTableSpace
 			Key key;
 			Value value;
 			bool filled;
+			bool exists;
 
 			bool operator==(const Pair& other);
+
+			Pair()
+			{
+				key = {};
+				value = {};
+				filled = false;
+				exists = false;
+			}
 		};
 
 		std::vector<Pair> _data;
@@ -115,6 +124,7 @@ namespace HashTableSpace
 				_data[index].key = key;
 				_data[index].value = value;
 				_data[index].filled = true;
+				_data[index].exists = true;
 				++_size;
 				return;
 			}
@@ -140,6 +150,7 @@ namespace HashTableSpace
 				_data[index].key = key;
 				_data[index].value = value;
 				_data[index].filled = true;
+				_data[index].exists = true;
 				++_size;
 				return;
 			}
@@ -211,6 +222,7 @@ namespace HashTableSpace
 			if (_data[index].filled && _data[index].key == key)
 			{
 				_data[index].filled = false;
+				--_size;
 				return true;
 			}
 		}
@@ -234,10 +246,12 @@ namespace HashTableSpace
 	int HashTable<Key, Value>::count(Key key)
 	{
 		int count = 0;
-		for(size_t i = 0; i < _size; ++i)
+		for(size_t i = 0; i <_data.size(); ++i)
 		{
 			size_t index = (hash(key) + i * hash(key)) % _data.size();
-			if (hash(key) == hash(_data[index].key) && _data[index].filled) ++count;
+			if (hash(key) == hash(_data[index].key) && _data[index].filled) ++count; // Exsist
+			else if (!_data[index].filled && _data[index].exists) continue; // Deleted
+			else if (!_data[index].exists) break; // Not init
 		}
 		return count;
 	}
