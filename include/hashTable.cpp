@@ -65,7 +65,7 @@ namespace HashTableSpace
 	template<class Key, class Value>
 	size_t HashTable<Key, Value>::hash(const Key key)
 	{
-		return key % (Key)_data.size();
+		return key % _data.size();
 	}
 
 	template<class Key, class Value>
@@ -151,7 +151,7 @@ namespace HashTableSpace
 				_data[index].value = value;
 				_data[index].filled = true;
 				_data[index].exists = true;
-				++_size;
+				if(_data[index].key != key) ++_size;
 				return;
 			}
 		}
